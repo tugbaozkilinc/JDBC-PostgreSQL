@@ -10,15 +10,10 @@ import java.util.List;
 public class MedunnaTest {
 
     /*
-      Given
-           User connects to the database
-           (Host name: medunna.com, Database name: medunna_db, Usename: medunna_user, Password: medunna_pass_987))
-      When
-           User sends the query to get the names of created_by column from "room" table
-      Then
-           Assert that there are some rooms created by "john_doe".
-      And
-           User closes the connection
+      Given User connects to the database (Host name: medunna.com, Database name: medunna_db, Username: medunna_user, Password: medunna_pass_987))
+      When User sends the query to get the names of created_by column from "room" table
+      Then Assert that there are some rooms created by "john_doe".
+      And User closes the connection
     */
 
     @Test
@@ -33,10 +28,10 @@ public class MedunnaTest {
         while (resultSet.next()){
             created_byList.add(resultSet.getString(1));
         }
-        System.out.println("created_byList = " + created_byList);
-        // Assert that there are some rooms created by "john_doe".
+        System.out.println("created_byList: " + created_byList);
+        //Assert that there are some rooms created by "john_doe".
         Assert.assertTrue(created_byList.contains("john_doe"));
-        // User closes the connection
+        //User closes the connection
         JdbcUtils.closeConnectionAndStatement();
     }
 

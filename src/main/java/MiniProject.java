@@ -1,16 +1,15 @@
 import java.sql.*;
 import java.util.Scanner;
 
-public class ClassWork01 {
+public class MiniProject {
 
-    // Kullanıcıdan int öğelerini girmesini ve listeye öğe eklemesini istemek için kod yazın.
-    // Kullanıcıdan kaldırılacak öğeleri girmesini isteyin, ardından bu öğeyi listeden kaldırın.
-    // Kullanıcıdan güncellemek için öğeyi girmesini isteyin, ardından güncelleyin.
+    //Kullanıcıdan int öğelerini girmesini ve listeye öğe eklemesini istemek için kod yazın.
+    //Kullanıcıdan kaldırılacak öğeleri girmesini isteyin, ardından bu öğeyi listeden kaldırın.
+    //Kullanıcıdan güncellemek için öğeyi girmesini isteyin, ardından güncelleyin.
 
     private static Scanner scan = new Scanner(System.in);
     private static Connection connection;
     private static Statement createStatement;
-
     public static void main(String[] args) {
         connectToDatabase("localhost", "postgres", "postgres", "tubA.123");
         createStatement();
@@ -23,28 +22,35 @@ public class ClassWork01 {
                            "Press 3 to update the values\n" +
                            "Press 4 to remove the values\n" +
                            "Press 5 to exit");
-        int option = scan.nextInt();
-        if (option==1){
-            showTheTable();
-        } else if(option==2){
-            System.out.println("Enter the table name you want to enter the values");
-            String tableName = scan.next();
-            scan.nextLine();
-            System.out.println("Enter the values");
-            Object values = scan.nextLine();
-            JdbcUtils.enterValuesToTable(tableName, values);
-        } else if(option==3){
-            updateTheTable();
-        } else if(option==4){
-            removeValuesFromTable();
-        } else if(option==5){
-            exit();
-        } else {
-            try{
-                throw new Exception();
-            }catch (Exception e){
-                System.out.println("You did the wrong keying");
-            }
+        String option = scan.next();
+        switch (option) {
+            case "1":
+                showTheTable();
+                break;
+            case "2":
+                System.out.println("Enter the table name you want to enter the values");
+                String tableName = scan.next();
+                scan.nextLine();
+                System.out.println("Enter the values");
+                Object values = scan.nextLine();
+                enterValuesToTable(tableName, values);
+                break;
+            case "3":
+                updateTheTable();
+                break;
+            case "4":
+                removeValuesFromTable();
+                break;
+            case "5":
+                exit();
+                break;
+            default:
+                try {
+                    throw new Exception();
+                } catch (Exception e) {
+                    System.out.println("You did the wrong keying");
+                }
+                break;
         }
     }
 
@@ -53,7 +59,7 @@ public class ClassWork01 {
         String tableName = scan.next();
         System.out.println("Enter field numbers you want to see");
         int fieldNumber = scan.nextInt();
-        String sql = "select * from "+tableName;
+        String sql = "select * from " + tableName;
         ResultSet rst = JdbcUtils.executeQuery(sql);
         try{
             while (rst.next()){
@@ -91,7 +97,7 @@ public class ClassWork01 {
         String oldValue = scan.nextLine();
         System.out.println("Enter the new value for being updated one");
         String newValue = scan.nextLine();
-        String sql = "update "+tableName+" set "+fieldName+"="+newValue+" where "+fieldName+"="+oldValue;
+        String sql = "update " + tableName + " set " + fieldName + "=" + newValue + " where " + fieldName + "=" + oldValue;
         try {
             createStatement = connection.createStatement();
         } catch (SQLException e) {
@@ -116,6 +122,19 @@ public class ClassWork01 {
         }
     }
 
+    public static void enterValuesToTable(String tableName, Object... values){
+        StringBuilder fieldValues = new StringBuilder("");
+        for (Object w : values){
+            fieldValues.append(w).append(",");
+        }
+        fieldValues.deleteCharAt(fieldValues.length()-1);
+        try {
+            createStatement.execute("insert into " + tableName + " values(" + fieldValues + ")");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void removeValuesFromTable(){
         System.out.println("Enter the table name from which you want to remove");
         String tableName = scan.nextLine();
@@ -124,7 +143,7 @@ public class ClassWork01 {
         String fieldName = scan.nextLine();
         System.out.println("Enter the value you want to remove");
         String value = scan.nextLine();
-        String sql = "delete from "+tableName+" where "+fieldName+"="+value;
+        String sql = "delete from " + tableName + " where " + fieldName + "=" + value;
         while (true) {
             System.out.println("To continue to remove the values press 'c' to return to the menu press 'm'");
             String option = scan.next();
@@ -155,14 +174,14 @@ public class ClassWork01 {
             throw new RuntimeException(e);
         }
         try {
-            connection = DriverManager.getConnection("jdbc:postgresql://"+hostName+":5432/"+dbName, username, password);
+            connection = DriverManager.getConnection("jdbc:postgresql://" + hostName + ":5432/" + dbName, username, password);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         if(connection!=null){
-            System.out.println("Connection Success");
+            System.out.println("Connection Succeeded");
         }else {
-            System.out.println("Connection Fail");
+            System.out.println("Connection Failed");
         }
         return connection;
     }

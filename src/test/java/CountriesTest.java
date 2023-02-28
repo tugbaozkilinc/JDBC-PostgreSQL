@@ -10,22 +10,18 @@ import java.util.List;
 public class CountriesTest {
 
     /*
-     Given
-          User connects to the database
-     When
-          User sends the query to get the region ids from "countries" table
-     Then
-          Assert that the number of region ids greater than 1 is 17.
-     And
-          User closes the connection
+     Given User connects to the database
+     When User sends the query to get the region ids from "countries" table
+     Then Assert that the number of region ids greater than 1 is 17.
+     And User closes the connection
     */
 
     @Test
     public void countryTest() throws SQLException {
-        // User connects to the database
+        //User connects to the database
         JdbcUtils.connectToDatabase("localhost", "postgres", "postgres", "tubA.123");
         Statement statement = JdbcUtils.createStatement();
-        // User sends the query to get the region ids from "countries" table
+        //User sends the query to get the region ids from "countries" table
         String sql1 = "select region_id from countries";
         ResultSet resultSet = statement.executeQuery(sql1);
         List<Integer> ids = new ArrayList<>();
@@ -40,9 +36,9 @@ public class CountriesTest {
             }
         }
         System.out.println("idsGreaterThanOne: " + idsGreaterThanOne);
-        // Assert that the number of region ids greater than 1 is 17.
-        Assert.assertEquals(17, idsGreaterThanOne.size()); // Assert.assertTrue(idsGreaterThanOne.size()==17)
-        // User closes the connection
+        //Assert that the number of region ids greater than 1 is 17.
+        Assert.assertEquals(17, idsGreaterThanOne.size());
+        //User closes the connection
         JdbcUtils.closeConnectionAndStatement();
     }
 

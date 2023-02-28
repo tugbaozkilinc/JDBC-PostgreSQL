@@ -7,7 +7,6 @@ public class JdbcUtils {
     private static Connection connection;
     private static Statement createStatement;
     private static ResultSet resultSet;
-
     public static Connection connectToDatabase(String hostName, String dbName, String username, String password){
         try {
             Class.forName("org.postgresql.Driver");
@@ -15,14 +14,14 @@ public class JdbcUtils {
             throw new RuntimeException(e);
         }
         try {
-            connection = DriverManager.getConnection("jdbc:postgresql://"+hostName+":5432/"+dbName, username, password);
+            connection = DriverManager.getConnection("jdbc:postgresql://" + hostName + ":5432/" + dbName, username, password);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         if(connection!=null){
-            System.out.println("Connection Success");
+            System.out.println("Connection Succeeded");
         }else {
-            System.out.println("Connection Fail");
+            System.out.println("Connection Failed");
         }
         return connection;
     }
@@ -64,8 +63,8 @@ public class JdbcUtils {
             throw new RuntimeException(e);
         }
         try {
-            if(connection.isClosed()&&createStatement.isClosed()){
-                System.out.println("Connection and statement closed");
+            if(connection.isClosed() && createStatement.isClosed()){
+                System.out.println("Connection and statement is closed");
             } else {
                 System.out.println("Connection and statement is not closed");
             }
@@ -81,8 +80,8 @@ public class JdbcUtils {
         }
         fieldName_dataValue.deleteCharAt(fieldName_dataValue.length()-1);
         try {
-            createStatement.execute( "CREATE TABLE "+tableName+"("+fieldName_dataValue+")");
-            System.out.println("Table "+tableName+" successfully created");
+            createStatement.execute( "CREATE TABLE " + tableName + "(" + fieldName_dataValue + ")");
+            System.out.println("Table " + tableName + " successfully has been created");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -95,7 +94,7 @@ public class JdbcUtils {
         }
         fieldValue.deleteCharAt(fieldValue.length()-1);
         try {
-            resultSet = createStatement.executeQuery("select " + fieldValue + " from "+tableName);
+            resultSet = createStatement.executeQuery("select " + fieldValue + " from " + tableName);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -128,7 +127,7 @@ public class JdbcUtils {
         }
         fieldValues.deleteCharAt(fieldValues.length()-1);
         try {
-            createStatement.execute("insert into "+tableName+" values("+fieldValues+")");
+            createStatement.execute("insert into " + tableName + " values(" + fieldValues + ")");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -137,7 +136,7 @@ public class JdbcUtils {
     public static List<Object> addElementsToList(String tableName, String fieldName){
         List<Object> list = new ArrayList<>();
         try {
-            String sql = "select "+fieldName+" from "+tableName;
+            String sql = "select " + fieldName + " from " + tableName;
             executeQuery(sql);
             while (resultSet.next()){
                 list.add(resultSet.getObject(1));
