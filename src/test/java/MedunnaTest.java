@@ -28,7 +28,7 @@ public class MedunnaTest {
         while (resultSet.next()){
             created_byList.add(resultSet.getString(1));
         }
-        System.out.println("created_byList: " + created_byList);
+        System.out.println("Created_byList: " + created_byList);
         //Assert that there are some rooms created by "john_doe".
         Assert.assertTrue(created_byList.contains("john_doe"));
         //User closes the connection

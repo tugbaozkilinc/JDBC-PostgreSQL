@@ -16,7 +16,7 @@ public class C02 {
         ResultSet rst = st.executeQuery(sql);
         rst.next();
         double average = rst.getDouble(1);
-        System.out.println(average);
+        System.out.println("Average is: " + average);
         Assert.assertTrue(average<90);
         JdbcUtils.closeConnectionAndStatement();
     }

@@ -1,6 +1,7 @@
 import java.sql.*;
+import java.sql.CallableStatement;
 
-public class CallableStatement {
+public class CallableStatement01 {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
@@ -20,13 +21,12 @@ public class CallableStatement {
                       "$$\n" +
                       "begin\n" +
                       "return x+y;\n" +
-                      "end\n" +
-                      "$$";
+                      "end $$;";
         //2. Adim: Function i calistir
         st.execute(sql1);
 
         //3. Adim: Function i cagir
-        java.sql.CallableStatement cst1 = con.prepareCall("{? = call toplama(?, ?)}"); //Bunun PreparedStatement tan farkı burda return type i da parametre olarak aliyoruz.
+        CallableStatement cst1 = con.prepareCall("{? = call toplama(?, ?)}"); //Bunun PreparedStatement tan farkı burda return type i da parametre olarak aliyoruz.
 
         //4. Adim: Return icin registerOutParameter() methodunu parametreler icinse set()... method larini uygula
         cst1.registerOutParameter(1, Types.NUMERIC);
@@ -40,26 +40,22 @@ public class CallableStatement {
         System.out.println(cst1.getBigDecimal(1)); //1 sutun gelecegi icin 1 yazdik
 
         //2. Ornek: Koninin hacmini hesaplayan bir function yazın.
-        String sql2 = "CREATE OR REPLACE FUNCTION konininHacmi(r numeric, h numeric)\n" +
-                      "returns numeric\n" +
+        String sql2 = "CREATE OR REPLACE FUNCTION konininHacmi(r int, h int)\n" +
+                      "returns int\n" +
                       "language plpgsql\n" +
                       "as\n" +
                       "$$\n" +
                       "begin\n" +
                       "return 3.14*r*r*h/3;\n" +
-                      "end\n" +
-                      "$$";
+                      "end $$;";
         st.execute(sql2);
-        java.sql.CallableStatement cst2 = con.prepareCall("{? = call konininHacmi(?, ?)}");
-        cst2.registerOutParameter(1, Types.NUMERIC);
+        CallableStatement cst2 = con.prepareCall("{? = call konininHacmi(?, ?)}");
+        cst2.registerOutParameter(1, Types.INTEGER);
         cst2.setInt(2, 1);
         cst2.setInt(3, 6);
         cst2.execute();
-        System.out.printf("%.2f", cst2.getBigDecimal(1));
-        System.out.println();
+        System.out.println(cst2.getInt(1));
         System.out.printf("%.2f", 2345.6778977);
-        System.out.println();
-        System.out.println("Koninin hacmi: " + String.format("%.2f", cst2.getBigDecimal(1)));
 
         con.close();
         st.close();

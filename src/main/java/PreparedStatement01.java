@@ -11,7 +11,7 @@ public class PreparedStatement01 {
 
         //Example 1: PreparedStatement kullanarak company adı IBM olan number_of_employees değerini 9999 olarak güncelleyin.
         //1. Adım: PreparedStatement query(parameterised sql query) olustur
-        String sql1 = "update companies set number_of_employees= ? where company= ?"; //nereyi dinamik yapmak istiyorsak oraya ? yazacagiz
+        String sql1 = "update companies set number_of_employees= ? where company= ?"; //nereyi dinamik yapmak istiyorsak oraya ? yaziyoruz.
 
         //2. Adim: PreparedStatement objesini olustur
         PreparedStatement pst = con.prepareStatement(sql1);

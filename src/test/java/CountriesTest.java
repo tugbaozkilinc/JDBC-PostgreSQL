@@ -28,14 +28,14 @@ public class CountriesTest {
         while (resultSet.next()){
             ids.add(resultSet.getInt(1));
         }
-        System.out.println("ids: " + ids);
+        System.out.println("Ids List: " + ids);
         List<Integer> idsGreaterThanOne = new ArrayList<>();
-        for(int w : ids){
+        for(Integer w : ids){
             if(w>1){
                 idsGreaterThanOne.add(w);
             }
         }
-        System.out.println("idsGreaterThanOne: " + idsGreaterThanOne);
+        System.out.println("Ids Greater Than One: " + idsGreaterThanOne);
         //Assert that the number of region ids greater than 1 is 17.
         Assert.assertEquals(17, idsGreaterThanOne.size());
         //User closes the connection

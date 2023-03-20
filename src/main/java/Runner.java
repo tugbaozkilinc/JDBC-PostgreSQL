@@ -10,7 +10,7 @@ public class Runner {
 
         JdbcUtils.connectToDatabase("localhost", "postgres", "postgres", "tubA.123");
         JdbcUtils.createStatement();
-        JdbcUtils.createTable("students", "name varchar(20)", "id int", "address varchar(80)");
+        JdbcUtils.createTable("students", "name varchar(20)", "parent_name varchar(20)", "id int", "address varchar(80)");
         JdbcUtils.execute("drop table students");
         JdbcUtils.createTable("school","classes varchar(20)", "teacher_name varchar(20)", "id int");
         JdbcUtils.execute("drop table school");
