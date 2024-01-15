@@ -1,3 +1,5 @@
+package jdbc;
+
 import java.sql.*;
 import java.util.Scanner;
 
@@ -7,7 +9,7 @@ public class MiniProject {
     //Kullanıcıdan kaldırılacak öğeleri girmesini isteyin, ardından bu öğeyi listeden kaldırın.
     //Kullanıcıdan güncellemek için öğeyi girmesini isteyin, ardından güncelleyin.
 
-    private static Scanner scan = new Scanner(System.in);
+    private static final Scanner scan = new Scanner(System.in);
     private static Connection connection;
     private static Statement createStatement;
     public static void main(String[] args) {
@@ -167,12 +169,7 @@ public class MiniProject {
         System.out.println("Have a nice day...");
     }
 
-    public static Connection connectToDatabase(String hostName, String dbName, String username, String password){
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public static void connectToDatabase(String hostName, String dbName, String username, String password){
         try {
             connection = DriverManager.getConnection("jdbc:postgresql://" + hostName + ":5432/" + dbName, username, password);
         } catch (SQLException e) {
@@ -183,7 +180,6 @@ public class MiniProject {
         }else {
             System.out.println("Connection Failed");
         }
-        return connection;
     }
 
     public static Statement createStatement(){

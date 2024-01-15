@@ -1,29 +1,28 @@
+package jdbc;
+
 import java.sql.*;
 
 public class ExecuteQuery01 {
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    public static void main(String[] args) throws SQLException {
 
-        Class.forName("org.postgresql.Driver"); //generates an instance of JDBC driver
-        Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "tubA.123"); //creating a connection between DriverManager and DBMS
-        Statement st = con.createStatement(); //executes an sql query
+        Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "tubA.123");
+        Statement st = con.createStatement();
 
         //Example 1: region id'si 1 olan "country name" değerlerini çağırın.
         String sql1 = "select country_name from countries where region_id=1";
-        boolean b1 = st.execute(sql1);
-        System.out.println(b1); //true, data cagirdigimiz icin
         //Note: Recordları görmek için executeQuery() methodunu kullanmalıyız.
         ResultSet rst1 = st.executeQuery(sql1);
         while (rst1.next()){
-            System.out.println(rst1.getString(1));
+            System.out.println(rst1.getString("country_name"));
         }
         System.out.println();
 
-        //Example 2: "region_id"nin 2'den büyük olduğu "country_id" ve "country_name" değerlerini çağırın.
+        //Example 2: region_id'nin 2'den büyük olduğu "country_id" ve "country_name" değerlerini çağırın.
         String sql2 = "select country_id, country_name from countries where region_id>2";
         ResultSet rst2 = st.executeQuery(sql2);
         while (rst2.next()){
-            System.out.println(rst2.getString("country_name") + "/" + rst2.getString(1));
+            System.out.println(rst2.getString(2) + "/" + rst2.getString(1));
         }
         System.out.println();
 

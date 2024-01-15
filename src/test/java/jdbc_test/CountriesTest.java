@@ -1,6 +1,8 @@
+package jdbc_test;
+
+import jdbc.JdbcUtils;
 import org.junit.Assert;
 import org.junit.Test;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,10 +22,10 @@ public class CountriesTest {
     public void countryTest() throws SQLException {
         //User connects to the database
         JdbcUtils.connectToDatabase("localhost", "postgres", "postgres", "tubA.123");
-        Statement statement = JdbcUtils.createStatement();
+        Statement st = JdbcUtils.createStatement();
         //User sends the query to get the region ids from "countries" table
         String sql1 = "select region_id from countries";
-        ResultSet resultSet = statement.executeQuery(sql1);
+        ResultSet resultSet = st.executeQuery(sql1);
         List<Integer> ids = new ArrayList<>();
         while (resultSet.next()){
             ids.add(resultSet.getInt(1));

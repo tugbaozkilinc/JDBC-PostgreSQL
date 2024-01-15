@@ -1,3 +1,5 @@
+package jdbc;
+
 import java.sql.*;
 
 public class PreparedStatement01 {
@@ -17,12 +19,12 @@ public class PreparedStatement01 {
         PreparedStatement pst = con.prepareStatement(sql1);
 
         //3. Adim: setInt(), setString() method larini kullanarak ? yerlerine deger ata
-        pst.setInt(1,9999); //parametre sayisi
+        pst.setInt(1,9999);
         pst.setString(2, "IBM");
 
         //4. Adim: Query i calistir
         int updatedLineNumber = pst.executeUpdate();
-        System.out.println(updatedLineNumber);
+        System.out.println("updatedLineNumber = " + updatedLineNumber);
 
         String sql2 = "select * from companies";
         ResultSet rst1 = st.executeQuery(sql2);
@@ -33,11 +35,9 @@ public class PreparedStatement01 {
         //2. Örnek: Prepared statement kullanarak company adı GOOGLE olan number_of_employees değerini 5555 olarak güncelleyin.
         pst.setInt(1,5555);
         pst.setString(2, "GOOGLE");
-        int updatedLineNumber2 = pst.executeUpdate();
-        System.out.println(updatedLineNumber2);
+        pst.executeUpdate();
 
-        con.close();
-        st.close();
+        JdbcUtils.closeConnectionAndStatement();
         rst1.close();
         pst.close();
     }

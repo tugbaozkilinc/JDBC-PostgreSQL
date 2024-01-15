@@ -1,7 +1,7 @@
-import java.sql.Connection;
+package jdbc;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 public class Runner {
@@ -31,7 +31,7 @@ public class Runner {
             System.out.println(resultSet.getString(1) + "/" + resultSet.getString(2) + "/" + resultSet.getString(3));
         }
         List<Object> list = JdbcUtils.addElementsToList("users", "age");
-        System.out.println(list);
+        System.out.println("list = " + list);
         JdbcUtils.closeConnectionAndStatement();
     }
 

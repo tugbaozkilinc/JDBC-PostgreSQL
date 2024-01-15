@@ -1,10 +1,11 @@
+package jdbc;
+
 import java.sql.*;
 
 public class ExecuteUpdate {
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    public static void main(String[] args) throws SQLException {
 
-        Class.forName("org.postgresql.Driver");
         Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "tubA.123");
         Statement st = con.createStatement();
 
@@ -13,7 +14,7 @@ public class ExecuteUpdate {
         st.executeUpdate(sql1); //eger bunu yazdırırsan update edilmiş satır sayısını gorursun System.out.println(st.executeUpdate(sql1)); 2
         ResultSet rst1 = st.executeQuery("select * from companies");
         while (rst1.next()){
-            System.out.println(rst1.getString(1) + "/" + rst1.getString(2) + "/" + rst1.getString(3));
+            System.out.println(rst1.getInt(1) + "/" + rst1.getString(2) + "/" + rst1.getInt(3));
         }
 
         con.close();

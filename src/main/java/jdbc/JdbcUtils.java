@@ -1,3 +1,5 @@
+package jdbc;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -5,14 +7,9 @@ import java.util.List;
 public class JdbcUtils {
 
     private static Connection connection;
-    private static Statement createStatement;
+    private static Statement statement;
     private static ResultSet resultSet;
     public static Connection connectToDatabase(String hostName, String dbName, String username, String password){
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
         try {
             connection = DriverManager.getConnection("jdbc:postgresql://" + hostName + ":5432/" + dbName, username, password);
         } catch (SQLException e) {
@@ -26,23 +23,31 @@ public class JdbcUtils {
         return connection;
     }
 
-    public static Statement createStatement(){
+    public static void closeConnectionAndStatement(){
         try {
-            createStatement = connection.createStatement();
+            connection.close();
+            statement.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return createStatement;
+        try {
+            if(connection.isClosed() && statement.isClosed()){
+                System.out.println("Connection and statement is closed");
+            } else {
+                System.out.println("Connection and statement is not closed");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static boolean execute(String sql){
-        boolean isExecute;
+    public static Statement createStatement(){
         try {
-            isExecute = createStatement.execute(sql);
+            statement = connection.createStatement();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return isExecute;
+        return statement;
     }
 
     public static PreparedStatement preparedStatement(String sql){
@@ -55,22 +60,33 @@ public class JdbcUtils {
         return preparedStatement;
     }
 
-    public static void closeConnectionAndStatement(){
+    public static boolean execute(String sql){
+        boolean isExecute;
         try {
-            connection.close();
-            createStatement.close();
+            isExecute = statement.execute(sql);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return isExecute;
+    }
+
+    public static ResultSet executeQuery(String sql){
         try {
-            if(connection.isClosed() && createStatement.isClosed()){
-                System.out.println("Connection and statement is closed");
-            } else {
-                System.out.println("Connection and statement is not closed");
-            }
+            resultSet = statement.executeQuery(sql);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return resultSet;
+    }
+
+    public static int executeUpdate(String sql){
+        int updatedLineNumber;
+        try {
+            updatedLineNumber = statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return updatedLineNumber;
     }
 
     public static void createTable(String tableName, String... fieldName_dataType){
@@ -80,7 +96,7 @@ public class JdbcUtils {
         }
         fieldName_dataValue.deleteCharAt(fieldName_dataValue.length()-1);
         try {
-            createStatement.execute( "CREATE TABLE " + tableName + "(" + fieldName_dataValue + ")");
+            statement.execute( "CREATE TABLE " + tableName + "(" + fieldName_dataValue + ")");
             System.out.println("Table " + tableName + " successfully has been created");
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -94,30 +110,11 @@ public class JdbcUtils {
         }
         fieldValue.deleteCharAt(fieldValue.length()-1);
         try {
-            resultSet = createStatement.executeQuery("select " + fieldValue + " from " + tableName);
+            resultSet = statement.executeQuery("select " + fieldValue + " from " + tableName);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return resultSet;
-    }
-
-    public static ResultSet executeQuery(String sql){
-        try {
-            resultSet = createStatement.executeQuery(sql);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return resultSet;
-    }
-
-    public static int executeUpdate(String sql){
-        int updatedLineNumber;
-        try {
-            updatedLineNumber = createStatement.executeUpdate(sql);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return updatedLineNumber;
     }
 
     public static void enterValuesToTable(String tableName, Object... values){
@@ -127,7 +124,7 @@ public class JdbcUtils {
         }
         fieldValues.deleteCharAt(fieldValues.length()-1);
         try {
-            createStatement.execute("insert into " + tableName + " values(" + fieldValues + ")");
+            statement.execute("insert into " + tableName + " values(" + fieldValues + ")");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

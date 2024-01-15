@@ -1,11 +1,12 @@
-import org.junit.Test;
+package jdbc_test;
 
+import jdbc.JdbcUtils;
+import org.junit.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.Assert.assertTrue;
 
 public class C01 {
@@ -21,7 +22,7 @@ public class C01 {
         while (rst.next()){
             namesList.add(rst.getString(1));
         }
-        System.out.println("List" + namesList);
+        System.out.println("List: " + namesList);
         assertTrue(namesList.contains("Merve Gul"));
         JdbcUtils.closeConnectionAndStatement();
     }
